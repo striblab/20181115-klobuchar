@@ -2,10 +2,13 @@ import 'intersection-observer';
 import scrollama from "scrollama";
 import {select, selectAll, event} from 'd3-selection';
 import StribPrecinctMap from './map.js';
+import { debounce } from 'lodash';
+const Stickyfill = require('stickyfilljs');
 
 // Doing these as constants for now because confusing ES6 "this" scoping + laziness
 const map = new StribPrecinctMap('#map-zoomer');
 const scroller = scrollama();
+var onloadHeight = window.innerHeight;
 
 class ScrollyGraphic {
 
@@ -24,16 +27,38 @@ class ScrollyGraphic {
   _handleResize() {
     var self = this;
 
-    // 1. update height of step elements
-    var stepHeight = Math.floor(window.innerHeight * 0.75);
-    this.step.style('height', stepHeight + 'px');
+    console.log('fireresize');
 
-    // 2. update width/height of graphic element
-    var bodyWidth = select('body').node().offsetWidth;
-    var textWidth = this.t.node().offsetWidth;
+    if (window.innerHeight == onloadHeight) {
 
-    // 3. tell scrollama to update new element dimensions
-    scroller.resize();
+      console.log('resizing');
+      // 1. update height of step elements
+      var stepHeight = Math.floor(window.innerHeight * 0.75);
+      this.step.style('height', stepHeight + 'px');
+
+      // // 2. update width/height of graphic element
+      var bodyWidth = select('body').node().offsetWidth;
+      var textWidth = this.t.node().offsetWidth;
+
+      // this.graphic
+      //   .style('height', window.innerHeight + 'px');
+
+      // // 3. update width of chart by subtracting from text width
+      // var chartMargin = 32;
+      // var textWidth = this.t.node().offsetWidth;
+      // var chartWidth = this.graphic.node().offsetWidth - textWidth - chartMargin;
+      // // make the height 1/2 of viewport
+      // var chartHeight = Math.floor(window.innerHeight / 2 );
+
+      // // console.log(chartWidth);
+
+      // this.chart
+      //     .style('width', chartWidth + 'px')
+      //     .style('height', chartHeight + 'px');
+
+      // 3. tell scrollama to update new element dimensions
+      scroller.resize();
+    }
   }
 
   // scrollama event handlers
@@ -42,6 +67,10 @@ class ScrollyGraphic {
     this.step.classed('is-active', function (d, i) {
       return i === response.index;
     })
+
+    if (response.index == 0) {
+      this.map.transition('default');
+    }
 
     if (response.index == 1) {
       this.map.transition('r16');
@@ -86,20 +115,22 @@ class ScrollyGraphic {
   }
 
   _handleContainerExit(response) {
-    if (response.direction == 'up') {
-      this.map.transition('default');
-    }
-
     // un-sticky the graphic, and pin to top/bottom of container
     this.graphic.classed('is-fixed', false);
     this.graphic.classed('is-bottom', response.direction === 'down');
+  }
+
+  _setupStickyfill() {
+    selectAll('.sticky').each(function () {
+      Stickyfill.add(this);
+    });
   }
 
   /********** PUBLIC METHODS **********/
 
   init() {
     var self = this;
-    // setupStickyfill();
+    this._setupStickyfill();
 
     this.map.render();
 
@@ -117,7 +148,7 @@ class ScrollyGraphic {
       debug: false,
     })
       .onStepEnter((response) => this._handleStepEnter(response))
-      .onContainerEnter((response) => this._handleContainerEnter(response))
+      .onContainerEnter(debounce((response) => this._handleContainerEnter(response) ))
       .onContainerExit((response) => this._handleContainerExit(response));
 
     // setup resize event

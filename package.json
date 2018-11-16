@@ -24,6 +24,7 @@
     "query-string": "^4.3.2",
     "scrollama": "^1.4.4",
     "stickyfill": "^1.1.1-strict",
+    "stickyfilljs": "^2.1.0",
     "topojson": "^3.0.2"
   },
   "devDependencies": {

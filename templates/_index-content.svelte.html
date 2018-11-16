@@ -50,8 +50,9 @@
       </div>
 
       <div class="scroll__graphic sticky">
+        <div id="ios-spacer"></div>
         <div id="map-container">
-          <svg id="precinct-map" viewBox="0 120 640 760" preserveAspectRatio="xMinYMin meet"></svg>
+          <svg id="precinct-map" viewBox="0 120 640 760" preserveAspectRatio="xMidYMin meet"></svg>
         </div>
       </div>
 
@@ -64,17 +65,3 @@
   </div>
 
 </div>
-
-
-<script>
-  // Dependencies and components
-  import ScrollyGraphic from "../app/scroller.js";
-
-  // Svelte logic
-  export default {
-    oncreate() {
-      var s = new ScrollyGraphic();
-      s.init();
-    }
-  };
-</script>

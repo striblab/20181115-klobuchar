@@ -2,7 +2,12 @@
  * Project specific styling.
  */
 
-html, body { margin:0; padding:0; overflow:hidden }
+html, body { margin:0; padding:0; overflow:hidden; }
+
+#ios-spacer {
+  height:115px;
+  display:none;
+}
 
 * {
   -webkit-font-smoothing: antialiased;
@@ -45,6 +50,15 @@ svg {
   margin-left:auto;
   margin-right:auto;
   display:block;
+
+  @media only screen and (max-width: 825px) {
+    height:100vh;
+    width:100%;
+  }
+
+  @media only screen and (max-width: 500px) {
+    height:auto;
+  }
 }
 
 @media all and (-ms-high-contrast:none) {
@@ -53,14 +67,14 @@ svg {
   } /* IE11 */
 }
 
+
+
 /********** SCROLLAMA **********/
 
 #scroll {
   display:inline-block;
   width:100%;
   position: relative;
-  margin-top:40px;
-
 }
 
 .scroll__graphic {
@@ -70,9 +84,29 @@ svg {
   top: 0;
   right: 0;
   width:66%;
+
   -webkit-transform: translate3d(0, 0, 0);
   -moz-transform: translate3d(0, 0, 0);
   transform: translate3d(0, 0, 0);
+
+  @media only screen and (max-width: 825px) {
+    width:100%;
+    position:absolute;
+    top:0;
+
+    &.is-fixed {
+      padding-left:16px!important;
+      padding-right:16px!important;
+      position:fixed;
+    }
+
+    &.is-bottom {
+      position:absolute;
+      bottom:0;
+      top:unset;
+    }
+
+  }
 }
 
 #map-container {
@@ -86,13 +120,19 @@ svg {
   position: relative;
   padding: 0 1rem;
   max-width: 30rem;
-  width: 33%;
+  width:33%;
   float:left;
+
+  @media only screen and (max-width: 825px) {
+    width:100%;
+    float:none;
+    max-width:none;
+    z-index:1000;
+  }
 }
 
 .step {
-  background-color:white;
-  height:200px;
+  background-color:transparent;
   opacity:0.3;
 
   &.is-active {
@@ -100,7 +140,31 @@ svg {
   }
 
   &:first-child {
-    margin: 10rem auto;
+    margin: 12rem auto;
+  }
+
+  &:last-child {
+    margin-bottom: 20rem;
+  }
+
+  @media only screen and (max-width: 825px) {
+    opacity: 1.0;
+    margin-bottom:10rem;
+    border-top:1px solid #333;
+
+
+    p {
+
+      &:last-child {
+          border-bottom:1px solid #333;
+              padding-bottom:15px;
+
+      }
+    }
+
+    &.is-active {
+      opacity:1.0;
+    }
   }
 }
 
@@ -113,97 +177,17 @@ svg {
   margin-bottom:0px;
   padding-bottom:5px;
 
+  @media only screen and (max-width: 825px) {
+    opacity:0.9;
+    background-color:white;
+  }
+
   &.subtext {
     margin-top:0px;
     padding-top:0px;
     font-size:0.8rem;
     color:gray;
   }
-}
-
-/********** TOOLTIPS **********/
-
-#tooltip {
-  position: absolute;
-  max-width: 15em;
-  background-color: white;
-  z-index:10000;
-  font-size:0.8em;
-  border: 1px solid #565656;
-  border-radius: 2px;
-  margin: 0.5em;
-  padding: 0.5em;
-  pointer-events: none;
-  padding-bottom:0px;
-
-  @media only screen and (max-width: 400px) {
-    display:none!important;
-  }
-}
-
-#tooltip h4 {
-  text-align:left;
-  padding-top: 0;
-  margin-top: 0;
-  font-size: 0.9em !important;
-  margin-bottom:3px;
-}
-
-#tooltip .winner2016 {
-  font-size:0.7em;
-  text-align:left;
-  color:#686868;
-  margin-bottom:3px;
-}
-
-
-#tooltip table {
-    margin-bottom:0.5em;
-}
-
-#tooltip th {
-  font-size: 0.6em;
-  text-transform:uppercase;
-  font-weight:normal;
-}
-
-#tooltip th.right {
-  text-align:right;
-}
-
-#tooltip td {
-  font-size: 0.8em;
-  padding-top: 0.5em;
-  padding-bottom: 0.4em;
-  padding-left:2px;
-}
-
-#tooltip td.right {
-  text-align:right;
-}
-
-#tooltip.hidden {
-  display: none;
-}
-
-#tooltip .label-d {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  display: inline-block;
-  margin-left: 2px;
-  margin-right: 5px;
-  background-color:#0258A0;
-}
-
-#tooltip .label-r {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  display: inline-block;
-  margin-left: 2px;
-  margin-right: 5px;
-  background-color:#C0272D;
 }
 
 /********** FILTER **********/
@@ -269,6 +253,12 @@ svg {
     -ms-transition: fill 800ms ease!important;
     transition: fill 800ms ease!important;
 
+  &::before {
+    content: ' ';
+    will-change: transition;
+    z-index: -1;
+  }
+
   &.flash {
     -webkit-animation: flash linear 1s infinite;
     animation: flash linear 1s infinite;
@@ -310,6 +300,14 @@ svg {
   text-shadow: 1px 0 5px black;
   pointer-events:none;
 
+  @supports (-ms-ime-align:auto) {
+    fill:#333;
+  }
+
+  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    fill:#333;
+  }
+
   @media only screen and (max-width: 660px) {
     font-size: 1.2em;
   }
@@ -322,6 +320,14 @@ svg {
   text-shadow: 1px 0 5px black;
   pointer-events:none;
 
+  @supports (-ms-ime-align:auto) {
+    fill:#333;
+  }
+
+  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    fill:#333;
+  }
+
   @media only screen and (max-width: 660px) {
     font-size: 1em;
   }
@@ -333,6 +339,14 @@ svg {
   font-family: "Benton Sans";
   text-shadow: 1px 0 5px black;
   pointer-events:none;
+
+  @supports (-ms-ime-align:auto) {
+    fill:#333;
+  }
+
+  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    fill:#333;
+  }
 
   @media only screen and (max-width: 660px) {
     font-size: 0.8em;
@@ -353,101 +367,6 @@ svg {
   stroke-width: 0.8px;
   stroke-linejoin: round;
   pointer-events:none;
-}
-
-/********** LEGEND *********/
-
-  #map-legend {
-    position:relative;
-    top:30px;
-    left:350px;
-    width:300px;
-    font-size:11px;
-    line-height:11px;
-    margin-left:auto;
-    font-family: "Benton Sans";
-    color:#303030;
-
-    @media only screen and (max-width: 660px) {
-      position:static;
-      display:block;
-      margin-left:auto;
-      margin-right:auto;
-      max-width:250px;
-      text-align:center;
-      margin-top:20px;
-      margin-bottom:20px;
-    }
-
-  }
-
-  .legend-row {
-    height:14px;
-    margin-bottom:1px;
-  }
-
-  .legend-row .bar {
-    width:30%;
-    height:10px;
-    float:left;
-  }
-
-  .legend-row .label {
-    width:68%;
-    float:right;
-    text-align:left;
-    font-weight:normal;
-    line-height:12px;
-
-  }
-
-  .legend-footer {
-    width:30%;
-    margin-top:5px;
-
-    .label {
-      font-weight:normal;
-      line-height:12px;
-    }
-  }
-
-  .footer-left {
-    float:left;
-    text-align:left;
-    width:15%;
-  }
-
-  .footer-right {
-    float:right;
-    text-align:left;
-    width:15%;
-  }
-
-  .blue {
-    background-image: linear-gradient(to right, white , #0258A0);
-  }
-
-  .purple {
-    background-image: linear-gradient(to right, white , #874e8e);
-  }
-
-  .red {
-    background-image: linear-gradient(to right, white , #C0272D);
-  }
-
-/********* ANNOTATIONS **********/
-
-.annotation-note-label {
-  font-size:8px;
-  font-weight:normal;
-}
-
-.annotation-group {
-  fill:none;
-
-  @media only screen and (max-width: 660px) {
-    display:none;
-  }
 }
 
 /********** PAGE STYLES **********/
